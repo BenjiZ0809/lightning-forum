@@ -1,4 +1,12 @@
-import { Flex, Icon } from "@chakra-ui/react";
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+  Flex,
+  Icon,
+  Text,
+} from "@chakra-ui/react";
 import React, { ChangeEvent, useState } from "react";
 import { BsLink45Deg, BsMic } from "react-icons/bs";
 import { BiPoll } from "react-icons/bi";
@@ -14,9 +22,10 @@ import {
   addDoc,
   collection,
   serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 import { firestore, storage } from "../../../firebase/clientApp";
-import { ref, uploadString } from "firebase/storage";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
 
 type NewPostFormProps = {
   user: User;
@@ -41,6 +50,7 @@ const NewPostForm: React.FC<NewPostFormProps> = ({ user }) => {
   const [textInput, setTextInput] = useState({ title: "", body: "" });
   const [selectedFile, setSelectedFile] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleCreatePost = async () => {
     const { communityId } = router.query;
@@ -55,19 +65,27 @@ const NewPostForm: React.FC<NewPostFormProps> = ({ user }) => {
       voteStatus: 0,
       createdAt: serverTimestamp() as Timestamp,
     };
+
+    setLoading(true);
     // store the post in db
     try {
-      const postDocRef = await addDoc(collection(firestore, "post"), newPost);
+      const postDocRef = await addDoc(collection(firestore, "posts"), newPost);
       // check for selectedFIle
       if (selectedFile) {
-        const imageRef = ref(storage, `post/${postDocRef.id}/image`);
+        // store in storage => getDownloadURL (return imageURL)
+        const imageRef = ref(storage, `posts/${postDocRef.id}/image`);
         await uploadString(imageRef, selectedFile, "data_url");
+        const downloadURL = await getDownloadURL(imageRef);
+
+        // update post doc by adding imageURL
+        await updateDoc(postDocRef, { imageURL: downloadURL });
       }
-      // store in storage => getDownloadURL (return imageURL)
-      // update post doc by adding imageURL
+      router.back();
     } catch (error: any) {
       console.log("handleCreatePost error", error.message);
+      setError(true);
     }
+    setLoading(false);
 
     // redirect the user back to the community page
   };
@@ -128,6 +146,12 @@ const NewPostForm: React.FC<NewPostFormProps> = ({ user }) => {
           ></ImageUpload>
         )}
       </Flex>
+      {error && (
+        <Alert status="error">
+          <AlertIcon />
+          <Text mr={2}>Error creating post</Text>
+        </Alert>
+      )}
     </Flex>
   );
 };
