@@ -10,6 +10,7 @@ import { auth } from "../../firebase/clientApp";
 import { useSetRecoilState } from "recoil";
 import { authModalState } from "../../atoms/authModalAtom";
 import { IoFlashSharp } from "react-icons/io5";
+import useDirectory from "../../hooks/useDirectory";
 //import useDirectory from "../../hooks/useDirectory";
 
 type CreatePostProps = {};
@@ -19,6 +20,7 @@ const CreatePostLink: React.FC<CreatePostProps> = () => {
   //const { toggleMenuOpen } = useDirectory();
   const [user] = useAuthState(auth);
   const setAuthModalState = useSetRecoilState(authModalState);
+  const { toggleMenuOpen } = useDirectory();
 
   //   const onClick = () => {
   //     // Could check for user to open auth modal before redirecting to submit
@@ -37,7 +39,12 @@ const CreatePostLink: React.FC<CreatePostProps> = () => {
       return;
     }
     const { communityId } = router.query;
-    router.push(`/r/${communityId}/submit`);
+
+    if (communityId) {
+      router.push(`/r/${communityId}/submit`);
+    }
+    // open our directory menu
+    toggleMenuOpen();
   };
 
   return (

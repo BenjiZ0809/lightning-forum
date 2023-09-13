@@ -1,15 +1,26 @@
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { Flex, Icon, Menu, MenuButton, MenuList, Text } from "@chakra-ui/react";
+import {
+  Flex,
+  Icon,
+  Image,
+  Menu,
+  MenuButton,
+  MenuList,
+  Text,
+} from "@chakra-ui/react";
 import React from "react";
 import { CgCommunity } from "react-icons/cg";
 import { TiHome } from "react-icons/ti";
 import Communities from "./Communities";
+import useDirectory from "../../../hooks/useDirectory";
 
 type DirectoryProps = {};
 
 const Directory: React.FC<DirectoryProps> = () => {
+  const { directoryState, toggleMenuOpen } = useDirectory();
+
   return (
-    <Menu>
+    <Menu isOpen={directoryState.isOpen}>
       <MenuButton
         cursor={"pointer"}
         padding={"0px 6px"}
@@ -17,6 +28,7 @@ const Directory: React.FC<DirectoryProps> = () => {
         mr={2}
         ml={{ base: 0, md: 2 }}
         _hover={{ outline: "1px solid", outlineColor: "gray.200" }}
+        onClick={toggleMenuOpen}
       >
         <Flex
           align={"center"}
@@ -24,10 +36,26 @@ const Directory: React.FC<DirectoryProps> = () => {
           width={{ base: "auto", lg: "200px" }}
         >
           <Flex align={"center"}>
-            <Icon as={TiHome} fontSize={24} mr={{ base: 1, md: 2 }}></Icon>
+            {directoryState.selectedMenuItem.imageURL ? (
+              <Image
+                src={directoryState.selectedMenuItem.imageURL}
+                alt="imageURL"
+                borderRadius={"full"}
+                boxSize={"24px"}
+                mr={2}
+              ></Image>
+            ) : (
+              <Icon
+                as={directoryState.selectedMenuItem.icon}
+                color={directoryState.selectedMenuItem.iconColor}
+                fontSize={24}
+                mr={{ base: 1, md: 2 }}
+              ></Icon>
+            )}
+
             <Flex display={{ base: "none", lg: "flex" }}>
               <Text fontWeight={600} fontSize={"10pt"}>
-                Home
+                {directoryState.selectedMenuItem.displayText}
               </Text>
             </Flex>
           </Flex>
