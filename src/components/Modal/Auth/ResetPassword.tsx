@@ -98,7 +98,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = () => {
           onClick={() =>
             setAuthModalState((prev) => ({
               ...prev,
-              view: "signup",
+              view: "signUp",
             }))
           }
         >
