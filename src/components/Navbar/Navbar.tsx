@@ -28,9 +28,9 @@ const Navbar: React.FC<NavbarProps> = () => {
         cursor={"pointer"}
         onClick={() => onSelectMenuItem(defaultMenuItem)}
       >
-        <Image src="/Images/lightninglogo.png" height={"30px"}></Image>
+        <Image src="/Images/lightninglogo.jpg" height={"30px"}></Image>
         <Image
-          src="/Images/lightningtext.png"
+          src="/Images/lightningtext.jpg"
           height={"46px"}
           display={{ base: "none", md: "unset" }}
         ></Image>
