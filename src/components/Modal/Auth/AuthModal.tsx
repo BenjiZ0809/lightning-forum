@@ -65,13 +65,12 @@ const AuthModal: React.FC<AuthModalProps> = () => {
             >
               {modalState.view === "login" || modalState.view === "signUp" ? (
                 <>
-                  {" "}
                   <OAuthButtons></OAuthButtons>
                   <Text color="gray.500">OR</Text>
                   <AuthInputs></AuthInputs>
                 </>
               ) : (
-                <ResetPassword></ResetPassword>
+                <ResetPassword toggleView={}></ResetPassword>
               )}
             </Flex>
           </ModalBody>
