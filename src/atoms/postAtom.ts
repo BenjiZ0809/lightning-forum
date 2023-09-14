@@ -3,7 +3,7 @@ import { Timestamp } from "@google-cloud/firestore";
 import { atom } from "recoil";
 
 export type Post = {
-  id: string;
+  id?: string;
   communityId: string;
   creatorId: string;
   creatorDisplayName: string;
@@ -17,7 +17,7 @@ export type Post = {
 };
 
 export type PostVote = {
-  id: string;
+  id?: string;
   postId: string;
   communityId: string;
   voteValue: number;

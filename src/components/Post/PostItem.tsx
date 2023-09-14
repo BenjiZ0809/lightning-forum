@@ -21,11 +21,13 @@ import {
   IoArrowUpCircleOutline,
   IoArrowUpCircleSharp,
   IoBookmarkOutline,
+  IoFlashSharp,
 } from "react-icons/io5";
 import moment from "moment";
-import { BsChat } from "react-icons/bs";
+import { BsChat, BsDot } from "react-icons/bs";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 type PostItemProps = {
   post: Post;
@@ -39,6 +41,7 @@ type PostItemProps = {
   ) => void;
   onDeletePost: (post: Post) => Promise<boolean>;
   onSelectPost?: (post: Post) => void;
+  homePage?: boolean;
 };
 
 const PostItem: React.FC<PostItemProps> = ({
@@ -48,6 +51,7 @@ const PostItem: React.FC<PostItemProps> = ({
   onVote,
   onDeletePost,
   onSelectPost,
+  homePage,
 }) => {
   const [loadingImage, setLoadingImage] = useState(true);
   const [error, setError] = useState(false);
@@ -130,6 +134,34 @@ const PostItem: React.FC<PostItemProps> = ({
             fontSize={"9pt"}
           >
             {/* home page check  */}
+            {homePage && (
+              <>
+                {post.communityImageURL ? (
+                  <Image
+                    src={post.communityImageURL}
+                    alt="imageURL"
+                    borderRadius={"full"}
+                    boxSize={"18px"}
+                    mr={2}
+                  />
+                ) : (
+                  <Icon
+                    as={IoFlashSharp}
+                    fontSize={"18pt"}
+                    mr={1}
+                    color={"blue.500"}
+                  />
+                )}
+                <Link href={`r/${post.communityId}`}>
+                  <Text
+                    fontWeight={700}
+                    _hover={{ textDecoration: "underline" }}
+                    onClick={(event) => event.stopPropagation()}
+                  >{`r/${post.communityId}`}</Text>
+                </Link>
+                <Icon as={BsDot} color={"gray.500"} fontSize={8}></Icon>
+              </>
+            )}
             <Text>
               Post by /u{post.creatorDisplayName}{" "}
               {moment(new Date(post.createdAt?.seconds * 1000)).fromNow()}

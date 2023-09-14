@@ -22,7 +22,12 @@ const SubmitPostPage: React.FC<submitProps> = () => {
         <Box p={"14px 0px"} borderBottom={"1px solid"} borderColor={"white"}>
           <Text>Create new post</Text>
         </Box>
-        {user && <NewPostForm user={user}></NewPostForm>}
+        {user && (
+          <NewPostForm
+            user={user}
+            communityImageURL={communityStateValue.currentCommunity?.imageURL}
+          ></NewPostForm>
+        )}
       </>
       <>
         {communityStateValue.currentCommunity && (
