@@ -70,7 +70,7 @@ const AuthModal: React.FC<AuthModalProps> = () => {
                   <AuthInputs></AuthInputs>
                 </>
               ) : (
-                <ResetPassword toggleView={}></ResetPassword>
+                <ResetPassword></ResetPassword>
               )}
             </Flex>
           </ModalBody>
